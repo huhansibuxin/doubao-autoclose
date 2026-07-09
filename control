@@ -1,0 +1,9 @@
+Package: com.doubao.autoclose
+Name: DoubaoAutoClose
+Version: 1.0
+Architecture: iphoneos-arm64
+Description: 自动关闭豆包输入法在巨魔分屏中的跳转弹窗
+Maintainer: user
+Author: user
+Section: Tweaks
+Depends: mobilesubstrate
