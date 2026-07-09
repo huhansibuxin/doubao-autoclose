@@ -12,15 +12,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install Dependencies
+        run: |
+          brew install dpkg ldid make 2>/dev/null || true
+
       - name: Setup Theos
         run: |
           git clone --depth 1 https://github.com/theos/theos.git $HOME/theos
           wget -qO- https://github.com/theos/sdks/archive/master.zip | bsdtar -xf- -C /tmp
+          mkdir -p $HOME/theos/sdks
           mv /tmp/sdks-master/iPhoneOS16.5.sdk $HOME/theos/sdks/
+          chmod +x $HOME/theos/bin/dm.pl
+          echo "$HOME/theos/bin" >> $GITHUB_PATH
 
       - name: Build
         run: |
           export THEOS=$HOME/theos
+          export PATH=$THEOS/bin:$PATH
           make package FINALPACKAGE=1
 
       - name: Upload Deb
