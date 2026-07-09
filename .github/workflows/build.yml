@@ -1,0 +1,30 @@
+name: Build Deb
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Theos
+        run: |
+          git clone --depth 1 https://github.com/theos/theos.git $HOME/theos
+          wget -qO- https://github.com/theos/sdks/archive/master.zip | bsdtar -xf- -C /tmp
+          mv /tmp/sdks-master/iPhoneOS16.5.sdk $HOME/theos/sdks/
+
+      - name: Build
+        run: |
+          export THEOS=$HOME/theos
+          make package FINALPACKAGE=1
+
+      - name: Upload Deb
+        uses: actions/upload-artifact@v4
+        with:
+          name: doubao-autoclose-deb
+          path: packages/*.deb
