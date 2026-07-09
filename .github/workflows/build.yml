@@ -18,10 +18,11 @@ jobs:
 
       - name: Setup Theos
         run: |
-          git clone --depth 1 https://github.com/theos/theos.git $HOME/theos
-          wget -qO- https://github.com/theos/sdks/archive/master.zip | bsdtar -xf- -C /tmp
+          curl -sL https://github.com/theos/theos/archive/master.tar.gz | tar xz -C $HOME
+          mv $HOME/theos-master $HOME/theos
+          curl -sL https://github.com/theos/sdks/archive/master.tar.gz | tar xz -C /tmp
           mkdir -p $HOME/theos/sdks
-          mv /tmp/sdks-master/iPhoneOS16.5.sdk $HOME/theos/sdks/
+          cp -r /tmp/sdks-master/iPhoneOS16.5.sdk $HOME/theos/sdks/
           chmod +x $HOME/theos/bin/dm.pl
           echo "$HOME/theos/bin" >> $GITHUB_PATH
 
